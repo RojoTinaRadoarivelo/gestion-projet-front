@@ -1,0 +1,58 @@
+@import "../../../assets/styles/variables.scss";
+
+.langage-dropdown {
+    position: relative;
+    width: 120px;
+    margin-right: 8px;
+    cursor: pointer;
+
+    .selected-option {
+        display: block;
+        padding: 15px 10px;
+        cursor: pointer;
+        color: var(--white) !important;
+
+        &:hover {
+            background-color: $accent-100;
+        }
+    }
+
+    .options {
+        position: absolute;
+        top: 104%;
+        left: 0;
+        right: 0;
+        background-color: var(--white);
+        z-index: 1050;
+        border: 0.25px solid rgba($color: #70655c, $alpha: 0.5);
+        display: none;
+
+        &.visible {
+            display: block;
+        }
+
+        .option {
+            padding: 8px 10px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: rgba($color: $accent-100, $alpha: 0.75);
+            }
+
+            &.selected {
+                background-color: rgba($color: $accent-100, $alpha: 0.85);
+                color: var(--white) !important;
+            }
+        }
+    }
+}
+
+.langage-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba($color: #49494941, $alpha: 0.3);
+    z-index: 999;
+}

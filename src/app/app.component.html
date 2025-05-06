@@ -1,1 +1,4 @@
-<router-outlet></router-outlet>
+<div class="w-full flex flex-col layout">
+    <div *ngIf="loading$ | async" class="top-loading-bar animate-loading-bar mb-1"></div>    
+    <router-outlet></router-outlet>
+</div>

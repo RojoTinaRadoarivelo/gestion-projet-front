@@ -2,16 +2,21 @@ import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
+  Router,
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, map, switchMap, take } from 'rxjs';
+import { AuthService } from 'src/app/modules/auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor() {}
+  constructor(
+    private readonly _authService: AuthService,
+    private _router: Router
+  ) {}
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
@@ -20,6 +25,19 @@ export class AuthGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    return true;
+    return new Promise<boolean | UrlTree>((resolve, reject) => {
+      this._authService
+        .loadInfos()
+        .pipe(
+          map((isAuthenticated) => {
+            if (isAuthenticated) {
+              resolve(true);
+            } else {
+              resolve(this._router.createUrlTree(['/auth/sign-in']));
+            }
+          })
+        )
+        .toPromise();
+    });
   }
 }

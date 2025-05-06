@@ -1,0 +1,15 @@
+### Main repository of the flags ###
+https://github.com/Yummygum/flagpack-core
+
+### We used the medium (m) detailed SVGs which are located here ###
+https://github.com/Yummygum/flagpack-core/tree/main/svg/m
+
+
+
+scram-sha-256
+
+
+https://www.youtube.com/watch?v=tVP7jHthVqQ
+
+b42e0519-26a2-4488-92db-7a37402e982c
+383fa595-8c5a-411b-807d-9a3147e62430
