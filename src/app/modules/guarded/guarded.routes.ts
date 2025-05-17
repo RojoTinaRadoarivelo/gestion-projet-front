@@ -1,9 +1,22 @@
 import { Routes } from '@angular/router';
+import { GuardedComponent } from './guarded.component';
 
 export const GUARDEDROUTES: Routes = [
   {
     path: '',
-    loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
+    component: GuardedComponent,
+    children: [
+      {
+        path: 'home',
+        loadChildren: () =>
+          import('./home/home.module').then((m) => m.HomeModule),
+      },
+      {
+        path: 'profile',
+        loadChildren: () =>
+          import('./profile/profile.module').then((m) => m.ProfileModule),
+      },
+    ],
   },
   {
     path: '**',

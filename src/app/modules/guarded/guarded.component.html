@@ -1,0 +1,9 @@
+<div class="w-full h-screen flex space-x-2">
+    <div class="w-16 max-w-24 px-2 py-4 bg-dark text-white">
+        <p>menu works!</p>        
+        <a [routerLink]="['/profile']" routerLinkActive="profile" >profile</a>
+    </div>
+    <div class="w-full px-2 py-4 bg-white ">
+        <router-outlet></router-outlet>
+    </div>
+</div>

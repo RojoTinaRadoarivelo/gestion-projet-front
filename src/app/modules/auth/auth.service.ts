@@ -14,6 +14,7 @@ import {
 } from 'rxjs';
 import { UserService } from 'src/app/core/user/user.service';
 import { LoadingService } from 'src/app/core/services/loading.service';
+import { ForgotPasswordDto } from './forgot-password/dto/forgot-pwd.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -176,6 +177,30 @@ export class AuthService {
         switchMap(() => this.resetInfo()),
         catchError(() => this.resetInfo())
       );
+  }
+
+  /**
+   *
+   * SEND VERIFICATION CODE
+   *
+   */
+  sendVerificationCode(email: string): Observable<any> {
+    return this._httpClientService.post(
+      `${this._apiUrl}/auth/send-verification-code`,
+      { email }
+    );
+  }
+
+  /**
+   *
+   * RESET PASSWORD
+   *
+   */
+  resetPassword(data: ForgotPasswordDto): Observable<any> {
+    return this._httpClientService.post(
+      `${this._apiUrl}/auth/forgot-password`,
+      data
+    );
   }
 
   check(): Observable<boolean> {

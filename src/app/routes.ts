@@ -15,9 +15,15 @@ export const APPROUTES: Routes = [
       import('./modules/auth/auth.module').then((m) => m.AuthModule),
   },
   {
-    path: 'home',
+    path: '',
     canActivate: [AuthGuard],
     loadChildren: () =>
       import('./modules/guarded/guarded.module').then((m) => m.GuardedModule),
   },
+  // {
+  //   path: 'home',
+  //   canActivate: [AuthGuard],
+  //   loadChildren: () =>
+  //     import('./modules/guarded/guarded.module').then((m) => m.GuardedModule),
+  // },
 ];

@@ -1,6 +1,5 @@
-export interface SignUpDto {
+export interface ForgotPasswordDto {
   email: string;
   password: string;
-  // userName: string;
   code: string;
 }

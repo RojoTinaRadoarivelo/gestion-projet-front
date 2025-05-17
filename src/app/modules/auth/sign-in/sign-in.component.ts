@@ -9,6 +9,7 @@ import {
 import { Router } from '@angular/router';
 import { LoadingService } from 'src/app/core/services/loading.service';
 import { AuthService } from '../auth.service';
+import { UserService } from 'src/app/core/user/user.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -24,7 +25,7 @@ export class SignInComponent implements OnInit {
   constructor(
     private readonly _authService: AuthService,
     private readonly _formBuilder: FormBuilder,
-
+    private readonly _userService: UserService,
     private readonly _loadingService: LoadingService,
     private readonly _router: Router
   ) {}
@@ -48,6 +49,32 @@ export class SignInComponent implements OnInit {
       next: () => this._router.navigateByUrl('home'),
       error: (err) => console.error('Échec de la connexion :', err),
     });
+  }
+
+  signUp() {
+    const email = this.signInForms.get('email')!.value;
+    if (!!email) this._authService.sendVerificationCode(email).subscribe();
+    this._router.navigate(['/auth/sign-up'], {
+      state: { userInfo: this.signInForms.value },
+    });
+
+    this.signInForms.reset();
+  }
+
+  forgotPassword() {
+    const email = this.signInForms.get('email')!.value;
+    if (!!email) {
+      this._userService.searchUserByEmail(email).subscribe((response) => {
+        this._authService.sendVerificationCode(email).subscribe();
+        this._router.navigate(['/auth/forgot-password'], {
+          state: { email },
+        });
+
+        this.signInForms.reset();
+      });
+    } else {
+      this._router.navigate(['/auth/forgot-password']);
+    }
   }
 
   handleLoading(event: boolean) {

@@ -14,7 +14,8 @@ import {
 export class CardsComponent implements OnChanges {
   @Input() widthClass: string = 'w-full';
   @Input() heightClass: string = 'h-full';
-  @Input() boxShadowClass: string = 'shadow shadow-sm';
+  // @Input() boxShadowClass: string = 'shadow shadow-sm';
+  @Input() boxShadowClass: string = '';
   @Input() bgClass: string = 'bg-white';
 
   cardClass: string = '';
