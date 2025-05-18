@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  Input,
   OnInit,
   Output,
   Renderer2,
@@ -25,6 +26,8 @@ export class LanguagesComponent implements OnInit {
 
   languages: AvailableLangs = [];
   isLangageOpen: boolean = false;
+
+  @Input() showLabel: boolean = true;
 
   @Output()
   public showLoading: EventEmitter<boolean> = new EventEmitter<boolean>(false);
