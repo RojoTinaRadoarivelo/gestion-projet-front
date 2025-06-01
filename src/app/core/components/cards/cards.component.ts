@@ -14,6 +14,7 @@ import {
 export class CardsComponent implements OnChanges {
   @Input() widthClass: string = 'w-full';
   @Input() heightClass: string = 'h-full';
+  @Input() paddingClass: string = 'py-8';
   // @Input() boxShadowClass: string = 'shadow shadow-sm';
   @Input() boxShadowClass: string = '';
   @Input() bgClass: string = 'bg-white';
@@ -36,7 +37,8 @@ export class CardsComponent implements OnChanges {
       this.heightClass,
       this.bgClass,
       this.boxShadowClass,
-      'rounded-lg py-8',
+      this.paddingClass,
+      'rounded-lg',
     ].join(' ');
     this._cdr.markForCheck();
   }
