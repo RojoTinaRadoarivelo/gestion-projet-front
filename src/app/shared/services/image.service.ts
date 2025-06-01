@@ -14,7 +14,7 @@ export class ImageService {
   }
 
   private transformName(word: string) {
-    return word.slice(0, 2).toUpperCase();
+    return word?.slice(0, 2).toUpperCase();
   }
   getDefaultAvatar(word: string) {
     return this.transformName(word);

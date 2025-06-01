@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/core/user/user.service';
 import { User } from 'src/app/core/user/user.types';
 import { ImageService } from 'src/app/shared/services/image.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -10,15 +11,20 @@ import { ImageService } from 'src/app/shared/services/image.service';
 })
 export class HomeComponent implements OnInit {
   user: User | null = null;
+  projectUrl: string = environment.FRONT_URL;
 
   projects: any[] = [
     {
       name: 'Project One',
-      description: 'One',
+      tag: 'One',
+      link: `${this.projectUrl}/project-one`,
+      members: 4,
     },
     {
       name: 'Project Two',
-      description: 'Two',
+      tag: 'Two',
+      link: `${this.projectUrl}/project-two`,
+      members: 4,
     },
   ];
 
@@ -43,7 +49,7 @@ export class HomeComponent implements OnInit {
   displayDefaultAvatar() {
     return this.user?.username
       ? this._imageService.getDefaultAvatar(this.user?.username)
-      : this._imageService.getDefaultAvatar(this.user!.email!);
+      : this._imageService.getDefaultAvatar(this.user?.email!);
   }
 
   hasAvatar() {
