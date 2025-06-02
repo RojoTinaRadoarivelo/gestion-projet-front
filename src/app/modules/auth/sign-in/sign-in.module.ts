@@ -17,7 +17,8 @@ const signInRoute: Routes = [
     path: '',
     component: SignInComponent,
     data: {
-      i18nPath: 'signin',
+      // i18nPath: 'signin',
+      i18nPath: ['signin', 'common', 'forgotpassword', 'signup'],
     },
     resolve: { translations: TranslationResolver },
   },

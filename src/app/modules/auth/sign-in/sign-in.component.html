@@ -1,5 +1,5 @@
 <div class="w-full my-24" *transloco="let t" >
-    <app-card [title]="t('signin works')" [widthClass]="'w-5/12 h-fit mx-auto '" [boxShadowClass]="'shadow shadow-lg'"
+    <app-card [title]="t('SignIn')" [widthClass]="'w-5/12 h-fit mx-auto '" [boxShadowClass]="'shadow shadow-lg'"
         [lang]="true" >
         <div langue>
             <languages (showLoading)="handleLoading($event)"></languages>
@@ -17,7 +17,7 @@
 
             <!-- Password field -->
             <mat-form-field class="w-full" [color]="'primary'">
-                <mat-label>Password</mat-label>
+                <mat-label>{{t('Password')}}</mat-label>
                 <input id="password" matInput type="password" [formControlName]="'password'" #passwordField>
                 <button mat-icon-button type="button"
                     (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'"
@@ -32,18 +32,18 @@
                 </mat-error>
             </mat-form-field>
 
-            <a (click)="forgotPassword()" class="mt-2 text-gray-400 cursor-pointer hover:text-gray-900 hover:underline">Forgot password</a>
+            <a (click)="forgotPassword()" class="mt-2 text-gray-400 cursor-pointer hover:text-gray-900 hover:underline">{{t('ForgotPassword')}}</a>
 
             <!-- Submit button -->
             <div class="w-full flex mt-2 space-x-1 ">
                 <button class="w-full px-3 py-2 text-gray-500 border-2 border-primary hover:text-white hover:bg-primary" mat-stroked-button
                     (click)="signUp()">                    
-                        Sign up                                        
+                        {{t('SignUp')}}
                 </button>
                 <button class="w-full px-3 py-2 text-white bg-primary" mat-raised-button
                     [disabled]="signInForms.disabled" (click)="signIn()">
                     <span *ngIf="!signInForms.disabled">
-                        Sign in
+                        {{t('SignIn')}}
                     </span>
                     <mat-progress-spinner *ngIf="signInForms.disabled" [diameter]="24"
                         [mode]="'indeterminate'"></mat-progress-spinner>

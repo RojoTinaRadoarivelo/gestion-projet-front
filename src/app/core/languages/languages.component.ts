@@ -15,6 +15,7 @@ import { TranslationService } from 'src/app/core/translation/translation.service
 
 import { AnimationBuilder, animate, style } from '@angular/animations';
 import { AvailableLangs } from '../services/navigation/navigation.type';
+import { TranslocoHttpLoader } from '../translation/transloco-loader';
 
 @Component({
   selector: 'languages',
@@ -44,6 +45,7 @@ export class LanguagesComponent implements OnInit {
     private _changeDetectorRef: ChangeDetectorRef,
     private _renderer2: Renderer2,
     private _animationBuilder: AnimationBuilder,
+    private _translocoHttpLoader: TranslocoHttpLoader,
     private _elementRef: ElementRef
   ) {
     this._handleOverlayClick = (): void => {
@@ -90,14 +92,28 @@ export class LanguagesComponent implements OnInit {
     this._hideOverlay();
 
     try {
-      // get the translation
-      const translations = await firstValueFrom(
-        this._translateService.getTranslationWithCustomPath(
-          langue,
-          (await this._activatedRoute.snapshot.data['i18nPath']) ??
-            (await this._activatedRoute.snapshot.firstChild?.data['i18nPath'])
-        )
-      );
+      let i18nPaths: string[] =
+        (await this._activatedRoute.snapshot.data['i18nPath']) ??
+        (await this._activatedRoute.snapshot.firstChild?.data['i18nPath']);
+      let translations: any;
+
+      translations = i18nPaths.some((el) => el == 'default')
+        ? await firstValueFrom(this._translocoHttpLoader.getTranslation(langue))
+        : null;
+
+      if (!translations) {
+        this._translateService
+          .getTranslationsWithCustomPath(langue, i18nPaths)
+          .subscribe((commonData) => {
+            translations = {
+              ...commonData,
+            };
+
+            this._translocoService.setTranslation(translations, langue, {
+              merge: true,
+            });
+          });
+      }
       if (translations) {
         this._translocoService.setTranslation(translations, langue, {
           merge: true,

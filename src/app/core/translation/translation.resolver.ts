@@ -13,6 +13,7 @@ import { LoadingService } from '../services/loading.service';
 
 @Injectable({ providedIn: 'root' })
 export class TranslationResolver implements Resolve<any> {
+  translationResponse: any;
   constructor(
     private _translocoService: TranslocoService,
     private _loadingService: LoadingService,
@@ -21,27 +22,38 @@ export class TranslationResolver implements Resolve<any> {
   ) {}
 
   async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const i18nPath = route.data['i18nPath'] ?? 'default';
+    const i18nPaths: string[] = Array.isArray(route.data['i18nPath'])
+      ? route.data['i18nPath']
+      : [route.data['i18nPath'] ?? 'default'];
+
     const lang = this._translocoService.getActiveLang();
 
     this._loadingService.show();
 
     try {
-      let translation: any;
-      if (i18nPath === 'default') {
-        translation = await firstValueFrom(
-          this._translocoHttpLoader.getTranslation(lang)
-        );
-      } else {
-        translation = await firstValueFrom(
-          this._translateService.getTranslationWithCustomPath(lang, i18nPath)
-        );
-      }
-      this._translocoService.setTranslation(translation, lang, {
-        merge: true,
-      });
+      this.translationResponse = i18nPaths.some((el) => el == 'default')
+        ? await firstValueFrom(this._translocoHttpLoader.getTranslation(lang))
+        : null;
 
-      return translation;
+      if (!this.translationResponse) {
+        this._translateService
+          .getTranslationsWithCustomPath(lang, i18nPaths)
+          .subscribe((commonData) => {
+            this.translationResponse = {
+              ...commonData,
+            };
+
+            this._translocoService.setTranslation(
+              this.translationResponse,
+              lang,
+              {
+                merge: true,
+              }
+            );
+          });
+      }
+
+      return this.translationResponse;
     } finally {
       this._loadingService.hide();
     }

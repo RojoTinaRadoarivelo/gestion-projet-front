@@ -15,7 +15,8 @@ const signUpRoute: Routes = [
     path: '',
     component: SignUpComponent,
     data: {
-      i18nPath: 'signup',
+      // i18nPath: 'signup',
+      i18nPath: ['signup', 'common'],
     },
     resolve: { translations: TranslationResolver },
   },

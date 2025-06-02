@@ -15,7 +15,8 @@ const forgotPwdRoute: Routes = [
     path: '',
     component: ForgotPasswordComponent,
     data: {
-      i18nPath: 'forgotpassword',
+      // i18nPath: 'forgotpassword',
+      i18nPath: ['forgotpassword', 'common'],
     },
     resolve: { translations: TranslationResolver },
   },
