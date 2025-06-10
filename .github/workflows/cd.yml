@@ -1,0 +1,32 @@
+name: CD pipeline
+on:
+  push:
+    branches: [master]
+  pull-request:
+    branches: [master]
+
+jobs:
+  front-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - use: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install DependenCDes
+        run: npm install
+
+      - name: Build Angular App
+        run: npm run build -- --configuration production
+
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v1.2
+        with:
+          publish-dir: ./dist/outil-gestion-projets-front-end
+          production-deploy: true
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}

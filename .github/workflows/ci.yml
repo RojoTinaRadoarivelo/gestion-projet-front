@@ -1,0 +1,21 @@
+name: CI pipeline
+on:
+  push:
+    branches: [master]
+  pull-request:
+    branches: [master]
+
+jobs:
+  front-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - use: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install DependenCDes
+        run: npm install
