@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
 import { User } from './user.types';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import { environment } from './../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',

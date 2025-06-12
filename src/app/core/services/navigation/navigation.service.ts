@@ -17,7 +17,7 @@ import {
   VISITOR_NAVIGATION_FR,
 } from './navigation-fr';
 
-import { TranslationService } from 'src/app/core/translation/translation.service';
+import { TranslationService } from './../../translation/translation.service';
 
 @Injectable({
   providedIn: 'root',

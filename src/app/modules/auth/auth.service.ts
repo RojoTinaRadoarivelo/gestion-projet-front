@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
+import { environment } from './../../../environments/environment';
 import { SignInDto } from './sign-in/dto/sign-in.dto';
 import { SignUpDto } from './sign-up/dto/sign-up.dto';
 import {
@@ -12,8 +12,8 @@ import {
   of,
   switchMap,
 } from 'rxjs';
-import { UserService } from 'src/app/core/user/user.service';
-import { LoadingService } from 'src/app/core/services/loading.service';
+import { UserService } from './../../core/user/user.service';
+import { LoadingService } from './../../core/services/loading.service';
 import { ForgotPasswordDto } from './forgot-password/dto/forgot-pwd.dto';
 
 @Injectable({

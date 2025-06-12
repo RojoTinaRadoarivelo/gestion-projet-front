@@ -11,7 +11,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { firstValueFrom } from 'rxjs';
-import { TranslationService } from 'src/app/core/translation/translation.service';
+import { TranslationService } from './../translation/translation.service';
 
 import { AnimationBuilder, animate, style } from '@angular/animations';
 import { AvailableLangs } from '../services/navigation/navigation.type';

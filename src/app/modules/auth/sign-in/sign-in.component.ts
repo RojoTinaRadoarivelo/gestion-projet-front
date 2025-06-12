@@ -7,9 +7,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoadingService } from 'src/app/core/services/loading.service';
+import { LoadingService } from './../../../core/services/loading.service';
 import { AuthService } from '../auth.service';
-import { UserService } from 'src/app/core/user/user.service';
+import { UserService } from './../../../core/user/user.service';
 
 @Component({
   selector: 'app-sign-in',
