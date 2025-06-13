@@ -100,7 +100,7 @@ module.exports = {
       addBase({
         ":root": {
           "--primary": theme("colors.primary"),
-          "--secondary": theme("colors.secondary"),
+          "--secondary": theme("colors.secondary.500"),
           "--white":theme("colors.white"),
           "--dark":theme("colors.dark"),
           "--gray":theme("colors.gray.400"),
