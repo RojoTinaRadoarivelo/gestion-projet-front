@@ -1,16 +1,16 @@
-name: CI pipeline
+name: CI FrontEnd pipeline
 on:
   push:
-    branches: [master]
-  pull-request:
-    branches: [master]
+  pull_request:
 
 jobs:
-  front-pipeline:
+  continuous_integration:
     runs-on: ubuntu-latest
 
     steps:
       - use: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -19,3 +19,14 @@ jobs:
 
       - name: Install DependenCDes
         run: npm install
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Run format check
+        run: npm run format
+
+      - name: Check commit message
+        use: wagoid/commitlint-github-action@v3
+        with:
+          configFile: commitlint.config.cjs
