@@ -3,7 +3,19 @@ const eslint = require("@eslint/js");
 const tseslint = require("typescript-eslint");
 const angular = require("angular-eslint");
 
-module.exports = tseslint.config(
+module.exports = [
+  // 👇 Ignorer node_modules, dist, etc.
+  {
+    ignores: [
+      "node_modules/**",
+      "dist/**",
+      ".angular/",
+      ".vs-code/",
+      "coverage/**",
+      "*.config.js",
+    ],
+  },
+...tseslint.config(
   {
     files: ["**/*.ts"],
     extends: [
@@ -40,4 +52,5 @@ module.exports = tseslint.config(
     ],
     rules: {},
   }
-);
+)
+];

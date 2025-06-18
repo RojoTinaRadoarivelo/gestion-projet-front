@@ -7,45 +7,45 @@ import {
   OnInit,
   Output,
   Renderer2,
+  inject,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TranslocoService } from '@ngneat/transloco';
+import { LangDefinition, TranslocoService } from '@ngneat/transloco';
 import { firstValueFrom } from 'rxjs';
 import { TranslationService } from 'src/app/core/translation/translation.service';
 
-import { AnimationBuilder, animate, style } from '@angular/animations';
-import { AvailableLangs } from '../services/navigation/navigation.type';
+import { AnimationBuilder, AnimationPlayer, animate, style } from '@angular/animations';
 
 @Component({
-  selector: 'languages',
+  selector: 'app-languages',
   templateUrl: './languages.component.html',
   styleUrls: ['./languages.component.scss'],
 })
 export class LanguagesComponent implements OnInit {
-  selected: any;
+  selected: LangDefinition | undefined;
 
-  languages: AvailableLangs = [];
-  isLangageOpen: boolean = false;
+  languages: LangDefinition[] = [];
+  isLangageOpen = false;
 
-  @Input() showLabel: boolean = true;
+  @Input() showLabel = true;
 
   @Output()
   public showLoading: EventEmitter<boolean> = new EventEmitter<boolean>(false);
-  flagCodes: any;
+  flagCodes!: Record<string, string>;
   private _asideOverlay: HTMLElement | null = null;
-  private _player: any;
-  private readonly _handleOverlayClick: any;
+  private _player!: AnimationPlayer;
+  private readonly _handleOverlayClick: (this: HTMLElement, ev: MouseEvent) => void;
 
-  constructor(
-    private _translocoService: TranslocoService,
-    private _translateService: TranslationService,
+  private _translocoService = inject(TranslocoService);
+  private _translateService = inject(TranslationService);
 
-    private _activatedRoute: ActivatedRoute,
-    private _changeDetectorRef: ChangeDetectorRef,
-    private _renderer2: Renderer2,
-    private _animationBuilder: AnimationBuilder,
-    private _elementRef: ElementRef
-  ) {
+  private _activatedRoute = inject(ActivatedRoute);
+  private _changeDetectorRef = inject(ChangeDetectorRef);
+  private _renderer2 = inject(Renderer2);
+  private _animationBuilder = inject(AnimationBuilder);
+  private _elementRef = inject(ElementRef);
+
+  constructor() {
     this._handleOverlayClick = (): void => {
       this.toggleLangage();
     };
@@ -61,7 +61,7 @@ export class LanguagesComponent implements OnInit {
     };
     // set the current language to the select
     this._translateService.getSelectedLang().subscribe((curr) => {
-      this.selected = this.languages.find((el) => el.id == curr);
+      this.selected = this.languages.find((el) => el.id === curr);
     });
   }
 
@@ -77,7 +77,7 @@ export class LanguagesComponent implements OnInit {
 
   async onSelectedLangage(langue: string, event: Event) {
     event.stopPropagation();
-    this.selected = this.languages.find((el) => el.id == langue);
+    this.selected = this.languages.find((el) => el.id === langue);
     this.isLangageOpen = false;
     this._changeDetectorRef.detectChanges();
     // current language for translation
@@ -95,8 +95,8 @@ export class LanguagesComponent implements OnInit {
         this._translateService.getTranslationWithCustomPath(
           langue,
           (await this._activatedRoute.snapshot.data['i18nPath']) ??
-            (await this._activatedRoute.snapshot.firstChild?.data['i18nPath'])
-        )
+            (await this._activatedRoute.snapshot.firstChild?.data['i18nPath']),
+        ),
       );
       if (translations) {
         this._translocoService.setTranslation(translations, langue, {
@@ -119,19 +119,11 @@ export class LanguagesComponent implements OnInit {
     this._asideOverlay!.classList.add('langage-overlay');
 
     // Append the aside overlay to the parent of the navigation
-    this._renderer2.appendChild(
-      this._elementRef.nativeElement.parentElement,
-      this._asideOverlay
-    );
+    this._renderer2.appendChild(this._elementRef.nativeElement.parentElement, this._asideOverlay);
 
     // Create the enter animation and attach it to the player
     this._player = this._animationBuilder
-      .build([
-        animate(
-          '400ms cubic-bezier(0.25, 0.8, 0.25, 1)',
-          style({ opacity: 1 })
-        ),
-      ])
+      .build([animate('400ms cubic-bezier(0.25, 0.8, 0.25, 1)', style({ opacity: 1 }))])
       .create(this._asideOverlay);
 
     // Play the animation
@@ -145,12 +137,7 @@ export class LanguagesComponent implements OnInit {
 
     // Create the leave animation and attach it to the player
     this._player = this._animationBuilder
-      .build([
-        animate(
-          '400ms cubic-bezier(0.25, 0.8, 0.25, 1)',
-          style({ opacity: 0 })
-        ),
-      ])
+      .build([animate('400ms cubic-bezier(0.25, 0.8, 0.25, 1)', style({ opacity: 0 }))])
       .create(this._asideOverlay);
 
     // Play the animation
@@ -161,10 +148,7 @@ export class LanguagesComponent implements OnInit {
       // If the aside overlay still exists...
       if (this._asideOverlay) {
         // Remove the event listener
-        this._asideOverlay.removeEventListener(
-          'click',
-          this._handleOverlayClick
-        );
+        this._asideOverlay.removeEventListener('click', this._handleOverlayClick);
 
         // Remove the aside overlay
         this._asideOverlay!.parentNode!.removeChild(this._asideOverlay);

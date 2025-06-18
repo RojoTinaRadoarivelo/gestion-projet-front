@@ -1,27 +1,26 @@
 .layout {
-    display: flex;
-    flex: 1 1 auto;
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
+  display: flex;
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 
-    /* Base styles for components that load as a route */
-    router-outlet {
-
-        +* {
-            position: relative;
-            display: flex;
-            flex: 1 1 auto;
-            width: 100%;
-        }
+  /* Base styles for components that load as a route */
+  router-outlet {
+    + * {
+      position: relative;
+      display: flex;
+      flex: 1 1 auto;
+      width: 100%;
     }
+  }
 }
 .top-loading-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    // background-color: var(--color-primary);
-    background-color: red;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  // background-color: var(--color-primary);
+  background-color: red;
 }

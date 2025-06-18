@@ -8,13 +8,11 @@ export const GUARDEDROUTES: Routes = [
     children: [
       {
         path: 'home',
-        loadChildren: () =>
-          import('./home/home.module').then((m) => m.HomeModule),
+        loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
       },
       {
         path: 'profile',
-        loadChildren: () =>
-          import('./profile/profile.module').then((m) => m.ProfileModule),
+        loadChildren: () => import('./profile/profile.module').then((m) => m.ProfileModule),
       },
     ],
   },
@@ -25,7 +23,6 @@ export const GUARDEDROUTES: Routes = [
   },
   {
     path: 'not-found',
-    loadChildren: () =>
-      import('../not-found/not-found.module').then((m) => m.NotFoundModule),
+    loadChildren: () => import('../not-found/not-found.module').then((m) => m.NotFoundModule),
   },
 ];

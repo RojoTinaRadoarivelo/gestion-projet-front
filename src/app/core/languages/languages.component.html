@@ -1,22 +1,47 @@
-<div class="langage-dropdown" [ngClass]="{'':showLabel,'w-12 h-12':!showLabel}" (click)="toggleLangage()" *transloco="let t">
-    <div class="selected-option my-0.5 " [ngClass]="{'':showLabel,' p-0.5':!showLabel}" [ngClass]="{' bg-accent-100 ':isLangageOpen,' bg-accent-50 ':!isLangageOpen}">
-        <div class="w-full flex space-x-1 items-center  text-sm">
-            <img class="w-6 mr-1"  [src]="'assets/images/flags/' + flagCodes[selected.id]?.toUpperCase() + '.svg'"
-                [alt]="'Flag image for ' + selected.id">
-                <span *ngIf="showLabel">                
-                    {{ t(""+selected?.label)}}
-                </span>
-        </div>
+<div
+  class="langage-dropdown"
+  [ngClass]="{ '': showLabel, 'w-12 h-12': !showLabel }"
+  tabindex="0"
+  (keydown.space)="toggleLangage()"
+  (click)="toggleLangage()"
+  *transloco="let t"
+>
+  <div
+    class="selected-option my-0.5"
+    [ngClass]="{ '': showLabel, ' p-0.5': !showLabel }"
+    [ngClass]="{ ' bg-accent-100 ': isLangageOpen, ' bg-accent-50 ': !isLangageOpen }"
+  >
+    <div class="w-full flex space-x-1 items-center text-sm">
+      <img
+        class="w-6 mr-1"
+        [src]="'assets/images/flags/' + flagCodes[selected!.id].toUpperCase() + '.svg'"
+        [alt]="'Flag image for ' + selected?.id"
+      />
+      <span *ngIf="showLabel">
+        {{ t('' + selected?.label) }}
+      </span>
     </div>
-    <div class="options" [ngClass]="{'visible':isLangageOpen,'hidden':!isLangageOpen}">
-        <div class="option" [ngClass]="{'':showLabel,'p-0.5':!showLabel}" *ngFor="let item of languages" [class.selected]="item.id==selected?.id" (click)="onSelectedLangage(item.id, $event)" >
-            <div class="w-full flex space-x-1  text-sm p-3">
-                <img class="w-6 mr-1"  [src]="'assets/images/flags/' + flagCodes[item.id]?.toUpperCase() + '.svg'"
-                    [alt]="'Flag image for ' + item.id">
-                    <span *ngIf="showLabel">                    
-                        {{t(""+item?.label)}}
-                    </span>
-            </div>
-        </div>
+  </div>
+  <div class="options" [ngClass]="{ visible: isLangageOpen, hidden: !isLangageOpen }">
+    <div
+      class="option"
+      [ngClass]="{ '': showLabel, 'p-0.5': !showLabel }"
+      *ngFor="let item of languages"
+      [class.selected]="item.id === selected?.id"
+      tabindex="0"
+      (keydown.enter)="onSelectedLangage(item.id, $event)"
+      (click)="onSelectedLangage(item.id, $event)"
+    >
+      <div class="w-full flex space-x-1 text-sm p-3">
+        <img
+          class="w-6 mr-1"
+          [src]="'assets/images/flags/' + flagCodes[item.id]?.toUpperCase() + '.svg'"
+          [alt]="'Flag image for ' + item.id"
+        />
+        <span *ngIf="showLabel">
+          {{ t('' + item?.label) }}
+        </span>
+      </div>
     </div>
+  </div>
 </div>
