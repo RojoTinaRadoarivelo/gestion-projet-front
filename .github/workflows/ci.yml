@@ -20,11 +20,11 @@ jobs:
       - name: Install DependenCDes
         run: npm install
 
-      - name: Run lint
-        run: npm run lint
-
       - name: Run format check
         run: npm run format
+
+      - name: Run lint
+        run: npm run lint
 
       - name: Check commit message
         use: wagoid/commitlint-github-action@v3
