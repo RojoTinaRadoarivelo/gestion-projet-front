@@ -35,7 +35,7 @@
       <div class="w-full flex space-x-1 text-sm p-3">
         <img
           class="w-6 mr-1"
-          [src]="'assets/images/flags/' + flagCodes[item.id]?.toUpperCase() + '.svg'"
+          [src]="'assets/images/flags/' + flagCodes[item.id].toUpperCase() + '.svg'"
           [alt]="'Flag image for ' + item.id"
         />
         <span *ngIf="showLabel">

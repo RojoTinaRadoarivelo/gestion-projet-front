@@ -10,7 +10,7 @@
         <h1 class="my-auto">Scratch</h1>
       </div>
       <div class="w-1/2 flex justify-end items-center space-x-1">
-        <languages (showLoading)="handleLoading($event)" [showLabel]="false"></languages>
+        <app-languages (showLoading)="handleLoading($event)" [showLabel]="false"></app-languages>
         <div class="">
           <a [routerLink]="['/profile']" routerLinkActive="profile">faq</a>
         </div>
