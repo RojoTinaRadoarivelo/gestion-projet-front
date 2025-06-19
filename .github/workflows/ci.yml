@@ -27,6 +27,6 @@ jobs:
         run: npm run lint
 
       - name: Check commit message
-        uses: wagoid/commitlint-github-action@v6
+        use: wagoid/commitlint-github-action@v6
         with:
           configFile: commitlint.config.cjs
