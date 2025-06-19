@@ -1,9 +1,9 @@
 name: CI FrontEnd pipeline
 on:
-  push:
+  pull_request:
 
 jobs:
-  continuous_integration:
+  PR-pipeline:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,8 +24,3 @@ jobs:
 
       - name: Run lint
         run: npm run lint
-
-      - name: Check commit message
-        uses: wagoid/commitlint-github-action@v6
-        with:
-          configFile: commitlint.config.cjs
