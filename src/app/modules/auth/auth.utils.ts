@@ -9,7 +9,6 @@ export class AuthUtils {
   /**
    * Constructor
    */
-  constructor() {}
 
   // -----------------------------------------------------------------------------------------------------
   // @ Public methods
@@ -52,39 +51,55 @@ export class AuthUtils {
    * @private
    */
   private static _b64decode(str: string): string {
-    const chars =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
     let output = '';
 
     str = String(str).replace(/=+$/, '');
 
     if (str.length % 4 === 1) {
-      throw new Error(
-        "'atob' failed: The string to be decoded is not correctly encoded."
-      );
+      throw new Error("'atob' failed: The string to be decoded is not correctly encoded.");
     }
 
-    /* eslint-disable */
-    for (
-      // initialize result and counters
-      let bc = 0, bs: any, buffer: any, idx = 0;
-      // get next character
-      (buffer = str.charAt(idx++));
-      // character found in table? initialize bit storage and add its ascii value;
-      ~buffer &&
-      ((bs = bc % 4 ? bs * 64 + buffer : buffer),
-      // and if not first of each 4 characters,
-      // convert the first 8 bits to one ascii character
-      bc++ % 4)
-        ? (output += String.fromCharCode(255 & (bs >> ((-2 * bc) & 6))))
-        : 0
-    ) {
-      // try to find character in table (0-63, not found => -1)
-      buffer = chars.indexOf(buffer);
+    let bc = 0;
+    let bs = 0;
+    let buffer: number;
+    let idx = 0;
+
+    while ((buffer = chars.indexOf(str.charAt(idx++))) !== -1) {
+      if (bc % 4) {
+        bs = bs * 64 + buffer;
+      } else {
+        bs = buffer;
+      }
+
+      if (bc++ % 4) {
+        output += String.fromCharCode(255 & (bs >> ((-2 * bc) & 6)));
+      }
     }
-    /* eslint-enable */
 
     return output;
+
+    // /* eslint-disable */
+    // for (
+    //   // initialize result and counters
+    //   let bc = 0, bs: number, buffer: number, idx = 0;
+    //   // get next character
+    //   (buffer = str.charAt(idx++));
+    //   // character found in table? initialize bit storage and add its ascii value;
+    //   ~buffer &&
+    //   ((bs = bc % 4 ? bs * 64 + buffer : buffer),
+    //   // and if not first of each 4 characters,
+    //   // convert the first 8 bits to one ascii character
+    //   bc++ % 4)
+    //     ? (output += String.fromCharCode(255 & (bs >> ((-2 * bc) & 6))))
+    //     : 0
+    // ) {
+    //   // try to find character in table (0-63, not found => -1)
+    //   buffer = chars.indexOf(buffer);
+    // }
+    // /* eslint-enable */
+
+    // return output;
   }
 
   /**
@@ -93,14 +108,14 @@ export class AuthUtils {
    * @param str
    * @private
    */
-  private static _b64DecodeUnicode(str: any): string {
+  private static _b64DecodeUnicode(str: string): string {
     return decodeURIComponent(
       Array.prototype.map
         .call(
           this._b64decode(str),
-          (c: any) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+          (c: string) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2),
         )
-        .join('')
+        .join(''),
     );
   }
 
@@ -137,7 +152,7 @@ export class AuthUtils {
    * @param token
    * @private
    */
-  private static _decodeToken(token: string): any {
+  private static _decodeToken(token: string): Record<string, unknown> | null {
     // Return if there is no token
     if (!token) {
       return null;
@@ -148,7 +163,7 @@ export class AuthUtils {
 
     if (parts.length !== 3) {
       throw new Error(
-        "The inspected token doesn't appear to be a JWT. Check to make sure it has three parts and see https://jwt.io for more."
+        "The inspected token doesn't appear to be a JWT. Check to make sure it has three parts and see https://jwt.io for more.",
       );
     }
 
@@ -173,13 +188,13 @@ export class AuthUtils {
     const decodedToken = this._decodeToken(token);
 
     // Return if the decodedToken doesn't have an 'exp' field
-    if (!decodedToken.hasOwnProperty('exp')) {
+    if (!Object.prototype.hasOwnProperty.call(decodedToken, 'exp')) {
       return null;
     }
 
     // Convert the expiration date
     const date = new Date(0);
-    date.setUTCSeconds(decodedToken.exp);
+    date.setUTCSeconds(decodedToken!['exp'] as number);
 
     return date;
   }

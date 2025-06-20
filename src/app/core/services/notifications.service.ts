@@ -6,5 +6,4 @@ import { environment } from 'src/environments/environment';
 })
 export class NotificationsService {
   TIMEOUT_DURATION: number = environment.TIMEOUT_DURATION;
-  constructor() {}
 }

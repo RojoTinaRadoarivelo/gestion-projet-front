@@ -1,9 +1,6 @@
 import { ValidatorFn, AbstractControl } from '@angular/forms';
 
-export function mustMatch(
-  controlName: string,
-  matchingControlName: string
-): ValidatorFn {
+export function mustMatch(controlName: string, matchingControlName: string): ValidatorFn {
   return (formGroup: AbstractControl) => {
     const control = formGroup.get(controlName);
     const matchingControl = formGroup.get(matchingControlName);

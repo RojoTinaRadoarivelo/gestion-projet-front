@@ -6,5 +6,5 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./splash-screen.component.scss'],
 })
 export class SplashScreenComponent {
-  @Input() splashing: boolean = false;
+  @Input() splashing = false;
 }

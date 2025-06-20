@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
 import { User } from './user.types';
 import { HttpClient } from '@angular/common/http';
@@ -10,8 +10,7 @@ import { environment } from 'src/environments/environment';
 export class UserService {
   private _user: ReplaySubject<User | null> = new ReplaySubject<User | null>(1);
   private _apiUrl: string = environment.API_URL;
-
-  constructor(private _httpClientService: HttpClient) {}
+  private readonly _httpClientService = inject(HttpClient);
 
   // -----------------------------------------------------------------------------------------------------
   // @ Accessors
@@ -36,8 +35,6 @@ export class UserService {
    *  Search user by email
    */
   searchUserByEmail(email: string) {
-    return this._httpClientService.get<{ data: any }>(
-      `${this._apiUrl}/auth/search/user/${email}`
-    );
+    return this._httpClientService.get(`${this._apiUrl}/auth/search/user/${email}`);
   }
 }

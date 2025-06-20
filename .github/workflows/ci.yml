@@ -1,0 +1,31 @@
+name: CI FrontEnd pipeline
+on:
+  push:
+
+jobs:
+  continuous_integration:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install DependenCDes
+        run: npm install
+
+      - name: Run format check
+        run: npm run format
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Check commit message
+        uses: wagoid/commitlint-github-action@v6
+        with:
+          configFile: commitlint.config.cjs
