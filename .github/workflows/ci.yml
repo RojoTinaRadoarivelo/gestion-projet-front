@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install DependenCDes
+      - name: Install Dependencies
         run: npm install
 
       - name: Run format check
