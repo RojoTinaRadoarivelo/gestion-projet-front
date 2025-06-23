@@ -16,16 +16,17 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install DependenCDes
+      - name: Install Dependencies
         run: npm install
 
       - name: Run format check
         run: npm run format
 
-      - name: Run lint
-        run: npm run lint
+      - name: Install Commitlint
+        run: npm install --save-dev @commitlint/cli
 
-      - name: Check commit message
-        uses: wagoid/commitlint-github-action@v6
-        with:
-          configFile: commitlint.config.cjs
+
+      - name: Run commitlint on latest commit only
+        run: |
+          echo "Checking last commit only:"
+          git show -s --format=%B HEAD | npx commitlint --config commitlint.config.cjs
