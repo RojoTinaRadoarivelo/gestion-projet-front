@@ -1,10 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  FormGroup,
-  FormControl,
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
+import { Component, OnInit, inject } from '@angular/core';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingService } from './../../../core/services/loading.service';
 import { AuthService } from '../auth.service';
@@ -30,22 +25,21 @@ export class ForgotPasswordComponent implements OnInit {
     email: new FormControl(),
   });
 
-  hideData: boolean = false;
+  hideData = false;
 
-  constructor(
-    private readonly _authService: AuthService,
-    private readonly _formBuilder: FormBuilder,
+  private readonly _authService = inject(AuthService);
+  private readonly _router = inject(Router);
+  private readonly _formBuilder = inject(FormBuilder);
+  private readonly _loadingService = inject(LoadingService);
 
-    private readonly _loadingService: LoadingService,
-    private readonly _router: Router,
-    private location: Location
-  ) {}
+  private readonly _location = inject(Location);
+
   ngOnInit(): void {
     this.initForm();
   }
 
   initForm() {
-    const state = this.location.getState() as {
+    const state = this._location.getState() as {
       email: string;
     };
 
@@ -65,7 +59,7 @@ export class ForgotPasswordComponent implements OnInit {
       },
       {
         validator: mustMatch('password', 'confirmpassword'),
-      }
+      },
     );
   }
 
@@ -87,10 +81,10 @@ export class ForgotPasswordComponent implements OnInit {
 
   VerifyEmail() {
     const email = this.verifyCodeForms.get('email')!.value;
-    if (!!email)
+    if (email)
       this._authService
         .sendVerificationCode(email)
-        .subscribe((response) => (this.hideData = !this.hideData));
+        .subscribe(() => (this.hideData = !this.hideData));
   }
 
   GoToSignIn() {

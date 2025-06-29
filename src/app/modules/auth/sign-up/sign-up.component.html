@@ -1,75 +1,128 @@
-<div class="w-full my-24"  *transloco="let t">
-    <app-card [title]="'Sign up'" [widthClass]="'w-5/12 h-fit mx-auto '" [boxShadowClass]="'shadow shadow-lg'"> <!-- t('signin works')-->
-        <form [formGroup]="verifyCodeForms" class="w-1/2 mx-auto p-2" *ngIf="!hideData">
-            <!-- Email field -->
-            <mat-form-field class="w-full" [color]="'primary'">
-                <mat-label>Email</mat-label>
-                <input id="email" matInput [formControlName]="'email'">
-                <mat-icon class="icon-size-5" [svgIcon]="'scratch-icon:new'" matSuffix></mat-icon>
-                <mat-error *ngIf="verifyCodeForms.get('email')!.hasError('required')">
-                    Email is required
-                </mat-error>
-            </mat-form-field>
-        
-            <!-- Submit button -->
-            <div class="w-full flex mt-2 space-x-1 ">
-                <button class="w-full px-3 py-2 text-gray-500 border-2 border-primary hover:text-white hover:bg-primary"
-                    mat-stroked-button [disabled]="verifyCodeForms.disabled" (click)="GoToSignIn()">
-                    Cancel
-                </button>
-                <button class="w-full px-3 py-2 text-white bg-primary" mat-raised-button [disabled]="verifyCodeForms.disabled"
-                    (click)="VerifyEmail()">
-                    <span *ngIf="!verifyCodeForms.disabled">
-                        Verify
-                    </span>
-                    <mat-progress-spinner *ngIf="verifyCodeForms.disabled" [diameter]="24"
-                        [mode]="'indeterminate'"></mat-progress-spinner>
-                </button>
-            </div>
-        </form>
-        <form [formGroup]="signUpForms" class="w-1/2 mx-auto p-2" *ngIf="hideData">            
-            
-            <!-- Password field -->
-            <mat-form-field class="w-full" [color]="'primary'">
-                <mat-label>Password</mat-label>
-                <input id="password" matInput type="password" [formControlName]="'password'" #passwordField>
-                <button mat-icon-button type="button"
-                    (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'"
-                    matSuffix>
-                    <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'password'"
-                        [svgIcon]="'scratch-icon:new'"></mat-icon>
-                    <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'text'" [svgIcon]="'scratch-icon:new'"></mat-icon>
-                </button>
-                <mat-error *ngIf="signUpForms.get('password')!.hasError('required')">
-                    Password is required
-                </mat-error>
-            </mat-form-field>
+<div class="w-full my-24" *transloco="let t">
+  <app-card
+    [title]="'Sign up'"
+    [widthClass]="'w-5/12 h-fit mx-auto '"
+    [boxShadowClass]="'shadow shadow-lg'"
+  >
+    <!-- t('signin works')-->
+    <form [formGroup]="verifyCodeForms" class="w-1/2 mx-auto p-2" *ngIf="!hideData">
+      <!-- Email field -->
+      <mat-form-field class="w-full" [color]="'primary'">
+        <mat-label>Email</mat-label>
+        <input id="email" matInput [formControlName]="'email'" />
+        <mat-icon class="icon-size-5" [svgIcon]="'scratch-icon:new'" matSuffix></mat-icon>
+        <mat-error *ngIf="verifyCodeForms.get('email')!.hasError('required')">
+          Email is required
+        </mat-error>
+      </mat-form-field>
 
-            <!-- confirm Password field -->
-            <mat-form-field class="w-full">
-                <mat-label>Confirm password</mat-label>
-                <input id="confirm" matInput type="password" [formControlName]="'confirmpassword'" #confirm />
-                <button mat-icon-button type="button"
-                    (click)="confirm.type === 'password'? (confirm.type = 'text'): (confirm.type = 'password')" matSuffix>
-                    <mat-icon class="icon-size-5" *ngIf="confirm.type === 'password'" [svgIcon]="'scratch-icon:new'"></mat-icon>
-                    <mat-icon class="icon-size-5" *ngIf="confirm.type === 'text'" [svgIcon]="'scratch-icon:new'"></mat-icon>
-                </button>
-                <mat-error *ngIf="signUpForms.get('confirmpassword')?.hasError('required')">
-                    Password is required
-                </mat-error>
-                <mat-error *ngIf="signUpForms.get('confirmpassword')?.hasError('mustMatch')">
-                    Passwords do not match.
-                </mat-error>
-            </mat-form-field>
+      <!-- Submit button -->
+      <div class="w-full flex mt-2 space-x-1">
+        <button
+          class="w-full px-3 py-2 text-gray-500 border-2 border-primary hover:text-white hover:bg-primary"
+          mat-stroked-button
+          [disabled]="verifyCodeForms.disabled"
+          (click)="GoToSignIn()"
+        >
+          Cancel
+        </button>
+        <button
+          class="w-full px-3 py-2 text-white bg-primary"
+          mat-raised-button
+          [disabled]="verifyCodeForms.disabled"
+          (click)="VerifyEmail()"
+        >
+          <span *ngIf="!verifyCodeForms.disabled"> Verify </span>
+          <mat-progress-spinner
+            *ngIf="verifyCodeForms.disabled"
+            [diameter]="24"
+            [mode]="'indeterminate'"
+          ></mat-progress-spinner>
+        </button>
+      </div>
+    </form>
+    <form [formGroup]="signUpForms" class="w-1/2 mx-auto p-2" *ngIf="hideData">
+      <!-- Password field -->
+      <mat-form-field class="w-full" [color]="'primary'">
+        <mat-label>Password</mat-label>
+        <input
+          id="password"
+          matInput
+          type="password"
+          [formControlName]="'password'"
+          #passwordField
+        />
+        <button
+          mat-icon-button
+          type="button"
+          (click)="
+            passwordField.type === 'password'
+              ? (passwordField.type = 'text')
+              : (passwordField.type = 'password')
+          "
+          matSuffix
+        >
+          <mat-icon
+            class="icon-size-5"
+            *ngIf="passwordField.type === 'password'"
+            [svgIcon]="'scratch-icon:new'"
+          ></mat-icon>
+          <mat-icon
+            class="icon-size-5"
+            *ngIf="passwordField.type === 'text'"
+            [svgIcon]="'scratch-icon:new'"
+          ></mat-icon>
+        </button>
+        <mat-error *ngIf="signUpForms.get('password')!.hasError('required')">
+          Password is required
+        </mat-error>
+      </mat-form-field>
 
-            <!-- code field -->
-            <mat-form-field class="w-full" [color]="'primary'">
-                <mat-label>code</mat-label>
-                <input id="code" matInput type="code" [formControlName]="'code'">
-            </mat-form-field>
+      <!-- confirm Password field -->
+      <mat-form-field class="w-full">
+        <mat-label>Confirm password</mat-label>
+        <input
+          id="confirm"
+          matInput
+          type="password"
+          [formControlName]="'confirmpassword'"
+          #confirm
+        />
+        <button
+          mat-icon-button
+          type="button"
+          (click)="
+            confirm.type === 'password' ? (confirm.type = 'text') : (confirm.type = 'password')
+          "
+          matSuffix
+        >
+          <mat-icon
+            class="icon-size-5"
+            *ngIf="confirm.type === 'password'"
+            [svgIcon]="'scratch-icon:new'"
+          ></mat-icon>
+          <mat-icon
+            class="icon-size-5"
+            *ngIf="confirm.type === 'text'"
+            [svgIcon]="'scratch-icon:new'"
+          ></mat-icon>
+        </button>
+        <mat-error *ngIf="signUpForms.get('confirmpassword')?.hasError('required')">
+          Password is required
+        </mat-error>
+        <mat-error *ngIf="signUpForms.get('confirmpassword')?.hasError('mustMatch')">
+          Passwords do not match.
+        </mat-error>
+      </mat-form-field>
 
-            <!-- userName field -->
-            <!-- <mat-form-field class="w-full " [color]="'primary'">
+      <!-- code field -->
+      <mat-form-field class="w-full" [color]="'primary'">
+        <mat-label>code</mat-label>
+        <input id="code" matInput type="code" [formControlName]="'code'" />
+      </mat-form-field>
+
+      <!-- userName field -->
+      <!-- <mat-form-field class="w-full " [color]="'primary'">
                 <mat-label>Username</mat-label>
                 <input id="userName" matInput [formControlName]="'userName'">
                 <mat-icon class="icon-size-5" [svgIcon]="'scratch-icon:new'" matSuffix></mat-icon>
@@ -78,8 +131,8 @@
                 </mat-error>
             </mat-form-field> -->
 
-            <!-- avatar field -->
-            <!-- <mat-form-field class="w-full" [color]="'primary'">
+      <!-- avatar field -->
+      <!-- <mat-form-field class="w-full" [color]="'primary'">
                 <mat-label>avatar</mat-label>
                 <input id="avatar" matInput type="avatar" [formControlName]="'avatar'" #passwordField>
                 <button mat-icon-button type="button"
@@ -91,27 +144,34 @@
                         [svgIcon]="'scratch-icon:new'"></mat-icon>
                 </button>
             </mat-form-field> -->
-            
 
-            <!-- Submit button -->
-            <div class="w-full flex mt-2 space-x-1 ">
-                <button class="w-full px-3 py-2 text-gray-500 border-2 border-primary hover:text-white hover:bg-primary"
-                    mat-stroked-button [disabled]="signUpForms.disabled" (click)="GoToSignIn()">                    
-                        Cancel 
-                </button>
-                <button class="w-full px-3 py-2 text-white bg-primary" mat-raised-button
-                    [disabled]="signUpForms.disabled" (click)="Save()">
-                    <span *ngIf="!signUpForms.disabled">
-                        Sign up
-                    </span>
-                    <mat-progress-spinner *ngIf="signUpForms.disabled" [diameter]="24"
-                        [mode]="'indeterminate'"></mat-progress-spinner>
-                </button>
-            </div>
-
-        </form>
-    </app-card>
-    <div class="w-1/2 mx-auto mt-3 flex flex-col items-center">
-        <p class="">&COPY;Copyright Rojo, 2025 </p>
-    </div>
+      <!-- Submit button -->
+      <div class="w-full flex mt-2 space-x-1">
+        <button
+          class="w-full px-3 py-2 text-gray-500 border-2 border-primary hover:text-white hover:bg-primary"
+          mat-stroked-button
+          [disabled]="signUpForms.disabled"
+          (click)="GoToSignIn()"
+        >
+          Cancel
+        </button>
+        <button
+          class="w-full px-3 py-2 text-white bg-primary"
+          mat-raised-button
+          [disabled]="signUpForms.disabled"
+          (click)="Save()"
+        >
+          <span *ngIf="!signUpForms.disabled"> Sign up </span>
+          <mat-progress-spinner
+            *ngIf="signUpForms.disabled"
+            [diameter]="24"
+            [mode]="'indeterminate'"
+          ></mat-progress-spinner>
+        </button>
+      </div>
+    </form>
+  </app-card>
+  <div class="w-1/2 mx-auto mt-3 flex flex-col items-center">
+    <p class="">&COPY;Copyright Rojo, 2025</p>
+  </div>
 </div>

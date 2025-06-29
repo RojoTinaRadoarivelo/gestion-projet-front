@@ -1,0 +1,32 @@
+name: CI FrontEnd pipeline
+on:
+  push:
+
+jobs:
+  continuous_integration:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run format check
+        run: npm run format
+
+      - name: Install Commitlint
+        run: npm install --save-dev @commitlint/cli
+
+
+      - name: Run commitlint on latest commit only
+        run: |
+          echo "Checking last commit only:"
+          git show -s --format=%B HEAD | npx commitlint --config commitlint.config.cjs

@@ -1,25 +1,23 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Translation, TranslocoService } from '@ngneat/transloco';
+import { Injectable, inject } from '@angular/core';
+import { LangDefinition, Translation, TranslocoService } from '@ngneat/transloco';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TranslationService {
-  private availableLangues: any[] = [];
+  private availableLangues: LangDefinition[] = [];
 
   private selectedLang$: Subject<string> = new ReplaySubject<string>(1);
   private readonly lang: string = 'lang';
 
-  constructor(
-    private _httpClient: HttpClient,
-    private translocoService: TranslocoService
-  ) {
-    this.availableLangues = this.translocoService.getAvailableLangs();
-    this.setSelectedLang(
-      localStorage.getItem(this.lang) || translocoService.getActiveLang()
-    );
+  private readonly _httpClient = inject(HttpClient);
+  private readonly _translocoService = inject(TranslocoService);
+
+  constructor() {
+    this.availableLangues = this._translocoService.getAvailableLangs() as LangDefinition[];
+    this.setSelectedLang(localStorage.getItem(this.lang) || this._translocoService.getActiveLang());
   }
   getAvailableLangues() {
     return this.availableLangues;
@@ -29,17 +27,12 @@ export class TranslationService {
   }
   setSelectedLang(select: string) {
     localStorage.setItem(this.lang, select);
-    this.translocoService.setActiveLang(select);
+    this._translocoService.setActiveLang(select);
     this.selectedLang$.next(select);
   }
 
   // Custom method to handle custom paths
-  getTranslationWithCustomPath(
-    lang: string,
-    path: string
-  ): Observable<Translation> {
-    return this._httpClient.get<Translation>(
-      `/assets/i18n/${lang}/${path}.json`
-    );
+  getTranslationWithCustomPath(lang: string, path: string): Observable<Translation> {
+    return this._httpClient.get<Translation>(`/assets/i18n/${lang}/${path}.json`);
   }
 }

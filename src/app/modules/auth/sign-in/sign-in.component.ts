@@ -1,11 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { SignInDto } from './dto/sign-in.dto';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingService } from './../../../core/services/loading.service';
 import { AuthService } from '../auth.service';
@@ -22,18 +17,22 @@ export class SignInComponent implements OnInit {
     password: new FormControl(),
   });
 
-  constructor(
-    private readonly _authService: AuthService,
-    private readonly _formBuilder: FormBuilder,
-    private readonly _userService: UserService,
-    private readonly _loadingService: LoadingService,
-    private readonly _router: Router
-  ) {}
+  private readonly _authService = inject(AuthService);
+  private readonly _router = inject(Router);
+  private readonly _formBuilder = inject(FormBuilder);
+  private readonly _loadingService = inject(LoadingService);
+
+  private readonly _userService = inject(UserService);
+
   ngOnInit(): void {
     this.signInForms = this._formBuilder.group({
       email: ['', Validators.required],
       password: ['', Validators.required],
     });
+  }
+
+  togglePassword(input: HTMLInputElement) {
+    input.type = input.type === 'password' ? (input.type = 'text') : (input.type = 'password');
   }
 
   signIn() {
@@ -53,7 +52,7 @@ export class SignInComponent implements OnInit {
 
   signUp() {
     const email = this.signInForms.get('email')!.value;
-    if (!!email) this._authService.sendVerificationCode(email).subscribe();
+    if (email) this._authService.sendVerificationCode(email).subscribe();
     this._router.navigate(['/auth/sign-up'], {
       state: { userInfo: this.signInForms.value },
     });
@@ -63,8 +62,8 @@ export class SignInComponent implements OnInit {
 
   forgotPassword() {
     const email = this.signInForms.get('email')!.value;
-    if (!!email) {
-      this._userService.searchUserByEmail(email).subscribe((response) => {
+    if (email) {
+      this._userService.searchUserByEmail(email).subscribe(() => {
         this._authService.sendVerificationCode(email).subscribe();
         this._router.navigate(['/auth/forgot-password'], {
           state: { email },
