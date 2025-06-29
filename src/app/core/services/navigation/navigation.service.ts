@@ -1,45 +1,29 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, ReplaySubject, Subject } from 'rxjs';
+
 import { NavigationType } from './navigation.type';
-import {
-  ADMIN_NAVIGATION_EN,
-  CLUB_ADMIN_NAVIGATION_EN,
-  PROFESSOR_NAVIGATION_EN,
-  STUDENT_NAVIGATION_EN,
-  VISITOR_NAVIGATION_EN,
-} from './navigation-en';
-
-import {
-  ADMIN_NAVIGATION_FR,
-  CLUB_ADMIN_NAVIGATION_FR,
-  PROFESSOR_NAVIGATION_FR,
-  STUDENT_NAVIGATION_FR,
-  VISITOR_NAVIGATION_FR,
-} from './navigation-fr';
-
+import { ADMIN_NAVIGATION_EN, VISITOR_NAVIGATION_EN } from './navigation-en';
+import { ADMIN_NAVIGATION_FR, VISITOR_NAVIGATION_FR } from './navigation-fr';
 import { TranslationService } from 'src/app/core/translation/translation.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NavigationService {
-  private _navigationSubject: Subject<NavigationType> =
-    new BehaviorSubject<NavigationType>(VISITOR_NAVIGATION_FR);
-
-  private _isVerticalMenuReduced: Subject<boolean> = new ReplaySubject<boolean>(
-    1
+  private _navigationSubject: Subject<NavigationType> = new BehaviorSubject<NavigationType>(
+    VISITOR_NAVIGATION_FR,
   );
 
-  navigation$: Observable<NavigationType> =
-    this._navigationSubject.asObservable();
+  private _isVerticalMenuReduced: Subject<boolean> = new ReplaySubject<boolean>(1);
 
-  isVerticalMenuReduced$: Observable<boolean> =
-    this._isVerticalMenuReduced.asObservable();
+  navigation$: Observable<NavigationType> = this._navigationSubject.asObservable();
+
+  isVerticalMenuReduced$: Observable<boolean> = this._isVerticalMenuReduced.asObservable();
 
   // need to erorganize menu to handle with gard and navigation perfectly and flexible code
   roleAccess: string[] = ['Super administrator'];
 
-  constructor(private readonly _translateService: TranslationService) {}
+  private readonly _translateService = inject(TranslationService);
 
   setVmenuReduced(isReduced: boolean) {
     this._isVerticalMenuReduced.next(isReduced);
@@ -50,10 +34,8 @@ export class NavigationService {
 
     // changing menus according to lang
     this._translateService.getSelectedLang().subscribe((curr) => {
-      let adminNav: any = null;
-      let visitorNav: any = null;
-      let coperativeManagerNav: any = null;
-      let secretarianNav: any = null;
+      let adminNav: NavigationType | null = null;
+      let visitorNav: NavigationType | null = null;
       switch (curr) {
         case 'en':
           adminNav = ADMIN_NAVIGATION_EN;

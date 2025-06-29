@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { UserService } from 'src/app/core/user/user.service';
 import { User } from 'src/app/core/user/user.types';
 import { ImageService } from 'src/app/shared/services/image.service';
 import { environment } from 'src/environments/environment';
+import { ProjectMenu } from '../project-menu.types';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +14,7 @@ export class HomeComponent implements OnInit {
   user: User | null = null;
   projectUrl: string = environment.FRONT_URL;
 
-  projects: any[] = [
+  projects: ProjectMenu[] = [
     {
       name: 'Project One',
       tag: 'One',
@@ -28,10 +29,9 @@ export class HomeComponent implements OnInit {
     },
   ];
 
-  constructor(
-    private readonly _userService: UserService,
-    private readonly _imageService: ImageService
-  ) {}
+  private readonly _userService = inject(UserService);
+  private readonly _imageService = inject(ImageService);
+
   async ngOnInit(): Promise<void> {
     this.user = await this.getUserInfo();
   }
@@ -46,10 +46,10 @@ export class HomeComponent implements OnInit {
     return this._imageService.getImg(path);
   }
 
-  displayDefaultAvatar() {
-    return this.user?.username
-      ? this._imageService.getDefaultAvatar(this.user?.username)
-      : this._imageService.getDefaultAvatar(this.user?.email!);
+  displayDefaultAvatar(): string {
+    return this.user!.userName
+      ? this._imageService.getDefaultAvatar(this.user!.userName)
+      : this._imageService.getDefaultAvatar(this.user!.email);
   }
 
   hasAvatar() {

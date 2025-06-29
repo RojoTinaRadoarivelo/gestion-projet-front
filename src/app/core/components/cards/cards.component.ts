@@ -1,10 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnChanges,
-  SimpleChanges,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, inject } from '@angular/core';
 
 @Component({
   selector: 'app-card',
@@ -12,26 +6,25 @@ import {
   styleUrls: ['./cards.component.scss'],
 })
 export class CardsComponent implements OnChanges {
-  @Input() widthClass: string = 'w-full';
-  @Input() heightClass: string = 'h-full';
-  @Input() paddingClass: string = 'py-8';
+  @Input() widthClass = 'w-full';
+  @Input() heightClass = 'h-full';
+  @Input() paddingClass = 'py-8';
   // @Input() boxShadowClass: string = 'shadow shadow-sm';
-  @Input() boxShadowClass: string = '';
-  @Input() bgClass: string = 'bg-white';
+  @Input() boxShadowClass = '';
+  @Input() bgClass = 'bg-white';
 
-  cardClass: string = '';
+  cardClass = '';
 
-  @Input() title: string = '';
-  @Input() titleClass: string = 'text-center text-2xl font-semibold';
+  @Input() title = '';
+  @Input() titleClass = 'text-center text-2xl font-semibold';
 
-  @Input() lang: boolean = false;
-  @Input() langClass: string = 'w-full flex justify-end';
+  @Input() lang = false;
+  @Input() langClass = 'w-full flex justify-end';
 
-  @Input() footerClass: string = '';
+  @Input() footerClass = '';
+  private readonly _cdr = inject(ChangeDetectorRef);
 
-  constructor(private readonly _cdr: ChangeDetectorRef) {}
-
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     this.cardClass = [
       this.widthClass,
       this.heightClass,

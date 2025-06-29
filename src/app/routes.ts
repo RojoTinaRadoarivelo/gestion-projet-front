@@ -11,14 +11,12 @@ export const APPROUTES: Routes = [
   {
     path: 'auth',
     canActivate: [NoAuthGuard],
-    loadChildren: () =>
-      import('./modules/auth/auth.module').then((m) => m.AuthModule),
+    loadChildren: () => import('./modules/auth/auth.module').then((m) => m.AuthModule),
   },
   {
     path: '',
     canActivate: [AuthGuard],
-    loadChildren: () =>
-      import('./modules/guarded/guarded.module').then((m) => m.GuardedModule),
+    loadChildren: () => import('./modules/guarded/guarded.module').then((m) => m.GuardedModule),
   },
   // {
   //   path: 'home',

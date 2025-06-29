@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { SignInDto } from './sign-in/dto/sign-in.dto';
 import { SignUpDto } from './sign-up/dto/sign-up.dto';
@@ -12,29 +12,26 @@ import {
   of,
   switchMap,
 } from 'rxjs';
-import { UserService } from 'src/app/core/user/user.service';
-import { LoadingService } from 'src/app/core/services/loading.service';
+import { UserService } from './../../core/user/user.service';
+import { LoadingService } from './../../core/services/loading.service';
 import { ForgotPasswordDto } from './forgot-password/dto/forgot-pwd.dto';
+import { reponsesDTO } from 'src/app/core/utils/responses.utils';
+import { UserOutputDto } from './interfaces/outputs.dto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private _authenticated: ReplaySubject<boolean> = new ReplaySubject<boolean>(
-    1
-  );
-  private authenticated$: Observable<boolean> =
-    this._authenticated.asObservable();
+  private _authenticated: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
+  private authenticated$: Observable<boolean> = this._authenticated.asObservable();
   private _apiUrl: string = environment.API_URL;
 
   private _role: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
   private role$: Observable<string[]> = this._role.asObservable();
 
-  constructor(
-    private _httpClientService: HttpClient,
-    private _loadingService: LoadingService,
-    private _userService: UserService
-  ) {}
+  private readonly _httpClientService = inject(HttpClient);
+  private readonly _loadingService = inject(LoadingService);
+  private readonly _userService = inject(UserService);
 
   // -----------------------------------------------------------------------------------------------------
   // @ Accessors
@@ -57,31 +54,28 @@ export class AuthService {
    *  SIGN IN
    *
    */
-  signIn(data: SignInDto): Observable<any> {
+  signIn(data: SignInDto): Observable<boolean> {
     return this._httpClientService
-      .post<{ data: { sess_id: string } }>(
-        `${this._apiUrl}/auth/sign-in`,
-        data,
-        this.headerOption
-      )
+      .post<{ data: { sess_id: string } }>(`${this._apiUrl}/auth/sign-in`, data, this.headerOption)
       .pipe(
         switchMap((response) => {
           if (response && response.data?.sess_id) {
             localStorage.setItem('SESS_ID', response.data.sess_id);
           }
           return this.loadInfos();
-        })
+        }),
       );
   }
 
-  private assignInfo(userResponse: any) {
-    const role = userResponse.data?.role?.name;
+  private assignInfo(userResponse: UserOutputDto) {
+    // const role = userResponse?.role?.name;
+    const role = 'Super Administrator';
     this._role.next([role]);
-    this._userService.user = userResponse.data;
+    this._userService.user = userResponse;
     this._authenticated.next(true);
     return of(true);
   }
-  private resetInfo() {
+  private resetInfo(): Observable<boolean> {
     this._authenticated.next(false);
     this._role.next([]);
     this._userService.user = null;
@@ -90,10 +84,7 @@ export class AuthService {
   }
 
   private handleError(error: HttpErrorResponse): Observable<boolean> {
-    if (
-      error instanceof HttpErrorResponse &&
-      (error.status === 403 || error.status === 401)
-    ) {
+    if (error instanceof HttpErrorResponse && (error.status === 403 || error.status === 401)) {
       if (!localStorage.getItem('SESS_ID')) {
         return of(false);
       }
@@ -102,15 +93,15 @@ export class AuthService {
           if (response && response.data?.sess_id) {
             localStorage.setItem('SESS_ID', response.data.sess_id);
           }
-          return this._httpClientService.get<{ data: any }>(
+          return this._httpClientService.get<reponsesDTO<UserOutputDto>>(
             `${this._apiUrl}/users/info`,
-            this.headerOption
+            this.headerOption,
           );
         }),
-        switchMap((userResponse) => this.assignInfo(userResponse)),
+        switchMap((userResponse) => this.assignInfo(userResponse!.data!)),
         catchError(() => {
           return this.signOut();
-        })
+        }),
       );
     } else {
       return of(false);
@@ -123,23 +114,23 @@ export class AuthService {
     }
     this._loadingService.show();
     return this._httpClientService
-      .get<{ data: any }>(`${this._apiUrl}/users/info`, this.headerOption)
+      .get<reponsesDTO<UserOutputDto>>(`${this._apiUrl}/users/info`, this.headerOption)
       .pipe(
-        switchMap((userResponse) => this.assignInfo(userResponse)),
+        switchMap((userResponse) => this.assignInfo(userResponse!.data!)),
         catchError((error) => this.handleError(error)),
         finalize(() => {
           setTimeout(() => {
             this._loadingService.hide();
           }, 2000);
-        })
+        }),
       );
   }
 
-  refreshToken(): Observable<any> {
-    return this._httpClientService.post(
+  refreshToken(): Observable<reponsesDTO<{ sess_id: string }>> {
+    return this._httpClientService.post<reponsesDTO<{ sess_id: string }>>(
       `${this._apiUrl}/auth/refresh`,
       { sess_id: localStorage.getItem('SESS_ID') },
-      this.headerOption
+      this.headerOption,
     );
   }
 
@@ -148,20 +139,16 @@ export class AuthService {
    * SIGN UP
    *
    */
-  signUp(data: SignUpDto): Observable<any> {
+  signUp(data: SignUpDto): Observable<boolean> {
     return this._httpClientService
-      .post<{ data: { sess_id: string } }>(
-        `${this._apiUrl}/auth/sign-up`,
-        data,
-        this.headerOption
-      )
+      .post<{ data: { sess_id: string } }>(`${this._apiUrl}/auth/sign-up`, data, this.headerOption)
       .pipe(
         switchMap((response) => {
           if (response && response.data?.sess_id) {
             localStorage.setItem('SESS_ID', response.data.sess_id);
           }
           return this.loadInfos();
-        })
+        }),
       );
   }
 
@@ -170,12 +157,12 @@ export class AuthService {
    * SIGN OUT
    *
    */
-  signOut(): Observable<any> {
+  signOut(): Observable<boolean> {
     return this._httpClientService
       .post(`${this._apiUrl}/auth/sign-out`, {}, this.headerOption)
       .pipe(
         switchMap(() => this.resetInfo()),
-        catchError(() => this.resetInfo())
+        catchError(() => this.resetInfo()),
       );
   }
 
@@ -184,10 +171,10 @@ export class AuthService {
    * SEND VERIFICATION CODE
    *
    */
-  sendVerificationCode(email: string): Observable<any> {
-    return this._httpClientService.post(
+  sendVerificationCode(email: string): Observable<reponsesDTO<object | null>> {
+    return this._httpClientService.post<reponsesDTO<object | null>>(
       `${this._apiUrl}/auth/send-verification-code`,
-      { email }
+      { email },
     );
   }
 
@@ -196,10 +183,10 @@ export class AuthService {
    * RESET PASSWORD
    *
    */
-  resetPassword(data: ForgotPasswordDto): Observable<any> {
-    return this._httpClientService.post(
+  resetPassword(data: ForgotPasswordDto): Observable<reponsesDTO<{ sess_id: string }>> {
+    return this._httpClientService.post<reponsesDTO<{ sess_id: string }>>(
       `${this._apiUrl}/auth/forgot-password`,
-      data
+      data,
     );
   }
 

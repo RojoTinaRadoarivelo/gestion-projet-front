@@ -18,23 +18,23 @@ module.exports = {
         900:amber[900]
       },
       accent:{
-        50:amber[700],
-        100:amber[800]
+        '50':amber[700],
+        '100':amber[800]
       },
       secondary:  {
-        100:blue[100],
-        400:blue[400],
-        500:blue[500],
-        700:blue[700],
-        900:blue[900]
+        '100':blue[100],
+        '400':blue[400],
+        '500':blue[500],
+        '700':blue[700],
+        '900':blue[900]
       },
       gray: {
-        50: "#aea59b",
-        100: "#988d81",
-        400: "#70665c",
-        500: "#5e564d",
-        900: "#413b34",
-        950: "#37322c",
+        '50': "#aea59b",
+        '100': "#988d81",
+        '400': "#70665c",
+        '500': "#5e564d",
+        '900': "#413b34",
+        '950': "#37322c",
       },
       white: "#fdfdfd",
       dark: "#2d2d2d",
@@ -109,8 +109,8 @@ module.exports = {
       addBase({
         ":root": {
           "--primary": theme("colors.primary"),
-          "--amber":theme("colors.amber"),
-          "--secondary": theme("colors.secondary"),
+          "--amber":theme("colors.amber.500"),          
+          "--secondary": theme("colors.secondary.500"),
           "--white":theme("colors.white"),
           "--dark":theme("colors.dark"),
           "--gray":theme("colors.gray.400"),

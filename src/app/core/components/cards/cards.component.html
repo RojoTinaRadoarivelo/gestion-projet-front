@@ -1,20 +1,20 @@
 <div [class]="cardClass">
-    <!-- langage -->
-    <div *ngIf="lang" [class]="langClass">
-        <ng-content select="[langue]"></ng-content>
-    </div>
-    <!-- Titre -->
-    <div *ngIf="title" [class]="titleClass">
-        {{ title }}
-    </div>
+  <!-- langage -->
+  <div *ngIf="lang" [class]="langClass">
+    <ng-content select="[langue]"></ng-content>
+  </div>
+  <!-- Titre -->
+  <div *ngIf="title" [class]="titleClass">
+    {{ title }}
+  </div>
 
-    <!-- Contenu principal -->
-    <div class="content my-4">
-        <ng-content></ng-content>
-    </div>
+  <!-- Contenu principal -->
+  <div class="content my-4">
+    <ng-content></ng-content>
+  </div>
 
-    <!-- Footer -->
-    <div *ngIf="footerClass" [class]="footerClass">
-        <ng-content select="[footer]"></ng-content>
-    </div>
+  <!-- Footer -->
+  <div *ngIf="footerClass" [class]="footerClass">
+    <ng-content select="[footer]"></ng-content>
+  </div>
 </div>
