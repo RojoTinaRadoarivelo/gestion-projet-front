@@ -12,8 +12,8 @@ import {
   of,
   switchMap,
 } from 'rxjs';
-import { UserService } from 'src/app/core/user/user.service';
-import { LoadingService } from 'src/app/core/services/loading.service';
+import { UserService } from './../../core/user/user.service';
+import { LoadingService } from './../../core/services/loading.service';
 import { ForgotPasswordDto } from './forgot-password/dto/forgot-pwd.dto';
 import { reponsesDTO } from 'src/app/core/utils/responses.utils';
 import { UserOutputDto } from './interfaces/outputs.dto';

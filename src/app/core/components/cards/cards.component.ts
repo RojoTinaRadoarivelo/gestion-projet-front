@@ -8,6 +8,7 @@ import { ChangeDetectorRef, Component, Input, OnChanges, inject } from '@angular
 export class CardsComponent implements OnChanges {
   @Input() widthClass = 'w-full';
   @Input() heightClass = 'h-full';
+  @Input() paddingClass = 'py-8';
   // @Input() boxShadowClass: string = 'shadow shadow-sm';
   @Input() boxShadowClass = '';
   @Input() bgClass = 'bg-white';
@@ -29,7 +30,8 @@ export class CardsComponent implements OnChanges {
       this.heightClass,
       this.bgClass,
       this.boxShadowClass,
-      'rounded-lg py-8',
+      this.paddingClass,
+      'rounded-lg',
     ].join(' ');
     this._cdr.markForCheck();
   }

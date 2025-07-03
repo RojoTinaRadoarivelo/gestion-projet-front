@@ -10,10 +10,11 @@ import {
   inject,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { LangDefinition, TranslocoService } from '@ngneat/transloco';
+import { LangDefinition, Translation, TranslocoService } from '@ngneat/transloco';
 import { firstValueFrom } from 'rxjs';
-import { TranslationService } from 'src/app/core/translation/translation.service';
+import { TranslationService } from './../translation/translation.service';
 
+import { TranslocoHttpLoader } from '../translation/transloco-loader';
 import { AnimationBuilder, AnimationPlayer, animate, style } from '@angular/animations';
 
 @Component({
@@ -44,6 +45,7 @@ export class LanguagesComponent implements OnInit {
   private _renderer2 = inject(Renderer2);
   private _animationBuilder = inject(AnimationBuilder);
   private _elementRef = inject(ElementRef);
+  private _translocoHttpLoader = inject(TranslocoHttpLoader);
 
   constructor() {
     this._handleOverlayClick = (): void => {
@@ -90,18 +92,28 @@ export class LanguagesComponent implements OnInit {
     this._hideOverlay();
 
     try {
-      // get the translation
-      const translations = await firstValueFrom(
-        this._translateService.getTranslationWithCustomPath(
-          langue,
-          (await this._activatedRoute.snapshot.data['i18nPath']) ??
-            (await this._activatedRoute.snapshot.firstChild?.data['i18nPath']),
-        ),
-      );
-      if (translations) {
-        this._translocoService.setTranslation(translations, langue, {
-          merge: true,
-        });
+      const i18nPaths: string[] =
+        (await this._activatedRoute.snapshot.data['i18nPath']) ??
+        (await this._activatedRoute.snapshot.firstChild?.data['i18nPath']);
+
+      let translations: Translation | null;
+
+      translations = i18nPaths.some((el) => el == 'default')
+        ? await firstValueFrom(this._translocoHttpLoader.getTranslation(langue))
+        : null;
+
+      if (!translations) {
+        this._translateService
+          .getTranslationsWithCustomPath(langue, i18nPaths)
+          .subscribe((commonData) => {
+            translations = {
+              ...commonData,
+            };
+
+            this._translocoService.setTranslation(translations, langue, {
+              merge: true,
+            });
+          });
       }
     } finally {
       this.showLoading.emit(false);

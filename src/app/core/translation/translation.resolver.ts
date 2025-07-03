@@ -15,23 +15,33 @@ export class TranslationResolver implements Resolve<Translation> {
   private readonly _translateService = inject(TranslationService);
 
   async resolve(route: ActivatedRouteSnapshot) {
-    const i18nPath = route.data['i18nPath'] ?? 'default';
+    const i18nPaths: string[] = Array.isArray(route.data['i18nPath'])
+      ? route.data['i18nPath']
+      : [route.data['i18nPath'] ?? 'default'];
     const lang = this._translocoService.getActiveLang();
 
     this._loadingService.show();
 
     try {
-      let translation: Translation;
-      if (i18nPath === 'default') {
-        translation = await firstValueFrom(this._translocoHttpLoader.getTranslation(lang));
-      } else {
-        translation = await firstValueFrom(
-          this._translateService.getTranslationWithCustomPath(lang, i18nPath),
-        );
+      let translation: Translation | null;
+
+      translation = i18nPaths.some((el) => el == 'default')
+        ? await firstValueFrom(this._translocoHttpLoader.getTranslation(lang))
+        : null;
+
+      if (!translation) {
+        this._translateService
+          .getTranslationsWithCustomPath(lang, i18nPaths)
+          .subscribe((commonData) => {
+            translation = {
+              ...commonData,
+            };
+
+            this._translocoService.setTranslation(translation, lang, {
+              merge: true,
+            });
+          });
       }
-      this._translocoService.setTranslation(translation, lang, {
-        merge: true,
-      });
 
       return translation;
     } finally {

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { LangDefinition, Translation, TranslocoService } from '@ngneat/transloco';
-import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { Observable, ReplaySubject, Subject, forkJoin, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -34,5 +34,17 @@ export class TranslationService {
   // Custom method to handle custom paths
   getTranslationWithCustomPath(lang: string, path: string): Observable<Translation> {
     return this._httpClient.get<Translation>(`/assets/i18n/${lang}/${path}.json`);
+  }
+  // parcours custom paths
+  getTranslationsWithCustomPath(lang: string, paths: string[]): Observable<Translation> {
+    const requests = paths.map((path) =>
+      this._httpClient.get<Translation>(`/assets/i18n/${lang}/${path}.json`),
+    );
+
+    return forkJoin(requests).pipe(
+      map(
+        (translations: Translation[]) => Object.assign({}, ...translations), // fusionne tous les objets
+      ),
+    );
   }
 }

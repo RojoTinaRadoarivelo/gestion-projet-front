@@ -1,10 +1,10 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoadingService } from 'src/app/core/services/loading.service';
+import { LoadingService } from './../../../core/services/loading.service';
 import { AuthService } from '../auth.service';
 import { Location } from '@angular/common';
-import { mustMatch } from 'src/app/core/utils/validators/must-match.validator';
+import { mustMatch } from './../../../core/utils/validators/must-match.validator';
 import { ForgotPasswordDto } from './dto/forgot-pwd.dto';
 
 @Component({

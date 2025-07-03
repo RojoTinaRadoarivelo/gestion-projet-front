@@ -8,6 +8,15 @@ module.exports = {
   theme: {
     colors: {
       primary: amber[700],
+      amber:{
+        50:amber[50],
+        100:amber[100],
+        200:amber[200],
+        400:amber[400],
+        500:amber[500],
+        700:amber[700],
+        900:amber[900]
+      },
       accent:{
         '50':amber[700],
         '100':amber[800]
@@ -100,7 +109,8 @@ module.exports = {
       addBase({
         ":root": {
           "--primary": theme("colors.primary"),
-          "--secondary": theme("colors.secondary"),
+          "--amber":theme("colors.amber.500"),          
+          "--secondary": theme("colors.secondary.500"),
           "--white":theme("colors.white"),
           "--dark":theme("colors.dark"),
           "--gray":theme("colors.gray.400"),

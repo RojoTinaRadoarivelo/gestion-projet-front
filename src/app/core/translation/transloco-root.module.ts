@@ -6,7 +6,7 @@ import {
 } from '@ngneat/transloco';
 import { NgModule } from '@angular/core';
 import { TranslocoHttpLoader } from './transloco-loader';
-import { environment } from 'src/environments/environment';
+import { environment } from './../../../environments/environment';
 
 @NgModule({
   exports: [TranslocoModule],
