@@ -7,8 +7,6 @@ import { environment } from 'src/environments/environment';
 export class ImageService {
   apiUrl: string = environment.API_URL;
 
-  constructor() {}
-
   getImg(url: string): string {
     return `${this.apiUrl}/${url}`;
   }
